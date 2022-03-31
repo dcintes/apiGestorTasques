@@ -32,11 +32,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Scheme::table('users',function(Blueprint $table) {
-            $table->dropForeign('intitations_group_foreign');
+        Schema::table('invitations', function (Blueprint $table) {
+            $table->dropForeign('invitations_group_foreign');
 
             $table->dropUnique('group_email_unique');
-		});
+        });
 
         Schema::dropIfExists('invitations');
     }

@@ -37,11 +37,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Scheme::table('users',function(Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             $table->dropForeign('tasks_template_foreign');
-			$table->dropForeign('tasks_group_foreign');
+            $table->dropForeign('tasks_group_foreign');
             $table->dropForeign('tasks_assigned_foreign');
-		});
+        });
 
         Schema::dropIfExists('tasks');
     }

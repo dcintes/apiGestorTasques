@@ -39,11 +39,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Scheme::table('users',function(Blueprint $table) {
+        Schema::table('rewards', function (Blueprint $table) {
             $table->dropForeign('rewards_template_foreign');
-			$table->dropForeign('rewards_group_foreign');
+            $table->dropForeign('rewards_group_foreign');
             $table->dropForeign('rewards_claimer_foreign');
-		});
+        });
 
         Schema::dropIfExists('rewards');
     }

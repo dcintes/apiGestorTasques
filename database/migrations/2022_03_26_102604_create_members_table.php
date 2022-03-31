@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('members', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('group');
             $table->unsignedBigInteger('user');
             $table->integer('balance');
             $table->boolean('admin');
             $table->timestamps();
 
-            $table->primary(['group', 'user']);
+            $table->unique(['group', 'user']);
 
             $table->foreign('group')->references('id')->on('groups');
             $table->foreign('user')->references('id')->on('users');
@@ -35,11 +36,11 @@ return new class extends Migration
     public function down()
     {
 
-        Scheme::table('users',function(Blueprint $table) {
-			$table->dropForeign('members_group_foreign');
-            $table->dropForeign('members_users_foreign');
-		});
-        
+        Schema::table('members', function (Blueprint $table) {
+            $table->dropForeign('members_group_foreign');
+            $table->dropForeign('members_user_foreign');
+        });
+
         Schema::dropIfExists('members');
     }
 };

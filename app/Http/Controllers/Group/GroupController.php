@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\StadisticsResource;
 use App\Models\Group;
+use App\Models\Invitation;
 use App\Models\Member;
+use App\Models\Reward;
+use App\Models\Task;
+use App\Models\Template_reward;
+use App\Models\Template_task;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -98,8 +103,26 @@ class GroupController extends Controller
     {
         $this->checkAdmin($id);
 
-        Group::findOrFail($id)->delete();
-        //FIXME: revisar cascade
+        DB::beginTransaction();
+        try {
+            // invitations
+            Invitation::where('group', '=', $id)->delete();
+            // template_tasks
+            Template_task::where('group', '=', $id)->delete();
+            // template_rewards
+            Template_reward::where('group', '=', $id)->delete();
+            // tasks
+            Task::where('group', '=', $id)->delete();
+            //rewards
+            Reward::where('group', '=', $id)->delete();
+            // members
+            Member::where('group', '=', $id)->delete();
+            // Eliminam grup
+            Group::findOrFail($id)->delete();
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+        }
 
         return 204;
     }

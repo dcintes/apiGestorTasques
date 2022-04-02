@@ -8,7 +8,10 @@ use App\Http\Resources\InvitationCollection;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Models\Invitation;
+use App\Models\Member;
+use App\Models\Task;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -67,8 +70,22 @@ class UserController extends Controller
     {
         $this->isLogedUser($id);
 
-        User::findOrFail($id)->delete();
-        //FIXME: revisar cascade
+        DB::beginTransaction();
+        try {
+            // Ralació usuaru membre
+            $member = Member::where('user', '=', $id)
+                ->update(['user' => null]);
+            // Tasques assignades
+            Task::where('assigned', '=', $member->id)
+                ->whereNull('completed_date')
+                ->update(['assigned' => null]);
+            // Esborram usuari
+            User::findOrFail($id)->delete();
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+        }
 
         return 204;
     }

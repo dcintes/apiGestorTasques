@@ -28,7 +28,7 @@ return new class extends Migration
 
             $table->foreign('template')->references('id')->on('template_rewards');
             $table->foreign('group')->references('id')->on('groups');
-            $table->foreign('claimer')->references('id')->on('users');
+            $table->foreign('claimer')->references('id')->on('members');
         });
     }
 

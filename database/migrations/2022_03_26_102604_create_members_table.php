@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('group');
-            $table->unsignedBigInteger('user');
+            $table->unsignedBigInteger('user')->nullable();
             $table->integer('balance');
             $table->boolean('admin');
             $table->timestamps();

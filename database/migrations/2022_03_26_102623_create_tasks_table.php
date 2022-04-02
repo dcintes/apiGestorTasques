@@ -26,7 +26,7 @@ return new class extends Migration
 
             $table->foreign('template')->references('id')->on('template_tasks');
             $table->foreign('group')->references('id')->on('groups');
-            $table->foreign('assigned')->references('id')->on('users');
+            $table->foreign('assigned')->references('id')->on('members');
         });
     }
 

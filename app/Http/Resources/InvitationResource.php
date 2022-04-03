@@ -16,10 +16,11 @@ class InvitationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'group' => $this->group,
+            'group_id' => $this->group_id,
             'email' => $this->email,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'group_name' => $this->group->name,
         ];
     }
 }

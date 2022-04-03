@@ -21,12 +21,10 @@ class InvitationController extends Controller
     public function create(Request $request)
     {
         $data = $this->validate($request->all(), [
-            'group' => 'required|exists:groups,id',
+            'group_id' => 'required|exists:groups,id',
             'email' => 'required|email',
         ]);
 
-        $user = User::where('email', $data['email']);
-        $this->isLogedUser($user->id);
         $this->checkAdmin($data['group']);
 
         $invitation = Invitation::create($data);
@@ -37,12 +35,12 @@ class InvitationController extends Controller
     /**
      * Descarta una invitació
      *
-     * @param  $id
+     * @param  $invitation_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($invitation_id)
     {
-        $invitation = Invitation::findOrFail($id);
+        $invitation = Invitation::findOrFail($invitation_id);
         $user = User::where('email', $invitation->email);
 
         $this->isLogedUser($user->id);
@@ -55,20 +53,19 @@ class InvitationController extends Controller
     /**
      * Retorna una invitació
      *
-     * @param  $id
+     * @param  $invitation_id
      * @return \Illuminate\Http\Response
      */
-    public function accept($id)
+    public function accept($invitation_id)
     {
-        $invitation = Invitation::findOrFail($id);
+        $invitation = Invitation::findOrFail($invitation_id);
         $user = User::where('email', $invitation->email);
 
         $this->isLogedUser($user->id);
 
         $member = new Member([
-            'group' => $invitation->group,
-            'user' => $user->id,
-            'balance' => 0,
+            'group_id' => $invitation->group_id,
+            'user_id' => $user->id,
             'admin' => false,
         ]);
         $member->balance = 0;

@@ -39,8 +39,8 @@ class GroupController extends Controller
             $group = Group::create($data);
 
             $member = new Member([
-                'group' => $group->id,
-                'user' => auth()->user()->id,
+                'group_id' => $group->id,
+                'user_id' => auth()->user()->id,
                 'admin' => true,
             ]);
             $member->balance = 0;
@@ -58,14 +58,14 @@ class GroupController extends Controller
     /**
      * Retorna un grup
      *
-     * @param  $id
+     * @param  $group_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($group_id)
     {
-        $this->checkMember($id);
+        $this->checkMember($group_id);
 
-        $group = Group::findOrFail($id);
+        $group = Group::findOrFail($group_id);
 
         return response()->json(new GroupResource($group), 200);
     }
@@ -74,12 +74,12 @@ class GroupController extends Controller
      * Actualitza un grup
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  $id
+     * @param  $group_id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $group_id)
     {
-        $this->checkAdmin($id);
+        $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
             'name' => 'required|max:255',
@@ -87,7 +87,7 @@ class GroupController extends Controller
             'coin' => 'required|max:255',
         ]);
 
-        $group = Group::findOrFail($id);
+        $group = Group::findOrFail($group_id);
         $group->update($data);
 
         return response()->json(new GroupResource($group), 200);
@@ -96,45 +96,46 @@ class GroupController extends Controller
     /**
      * Elimina un grup
      *
-     * @param  $id
+     * @param  $group_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($group_id)
     {
-        $this->checkAdmin($id);
+        $this->checkAdmin($group_id);
 
         DB::beginTransaction();
         try {
             // invitations
-            Invitation::where('group', '=', $id)->delete();
+            Invitation::where('group_id', '=', $group_id)->delete();
             // template_tasks
-            Template_task::where('group', '=', $id)->delete();
+            Template_task::where('group_id', '=', $group_id)->delete();
             // template_rewards
-            Template_reward::where('group', '=', $id)->delete();
+            Template_reward::where('group_id', '=', $group_id)->delete();
             // tasks
-            Task::where('group', '=', $id)->delete();
+            Task::where('group_id', '=', $group_id)->delete();
             //rewards
-            Reward::where('group', '=', $id)->delete();
+            Reward::where('group_id', '=', $group_id)->delete();
             // members
-            Member::where('group', '=', $id)->delete();
+            Member::where('group_id', '=', $group_id)->delete();
             // Eliminam grup
-            Group::findOrFail($id)->delete();
+            Group::findOrFail($group_id)->delete();
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();
+            throw $ex;
         }
 
         return 204;
     }
 
-    public function stadistics($id)
+    public function stadistics($group_id)
     {
-        $this->checkMember($id);
+        $this->checkMember($group_id);
 
         $stadistics = (object)[
             'tasksByUser' => DB::table('tasks')
-                ->select('assigned', DB::raw('count(*) as total'))
-                ->groupBy('assigned')
+                ->select('assigned_id', DB::raw('count(*) as total'))
+                ->groupBy('assigned_id')
                 ->get(),
         ];
 

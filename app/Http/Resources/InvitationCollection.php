@@ -14,6 +14,8 @@ class InvitationCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return $this->collection->transform(function ($invitation) {
+            return new InvitationResource($invitation);
+        });
     }
 }

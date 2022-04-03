@@ -53,8 +53,8 @@ class Controller extends BaseController
      */
     protected function checkMember($group_id)
     {
-        $member = Member::where('group', $group_id)
-            ->where('user', auth()->user()->id)
+        $member = Member::where('group_id', $group_id)
+            ->where('user_id', auth()->user()->id)
             ->first();
 
         if (!(array)$member) {

@@ -27,25 +27,25 @@ Route::post('/login', [UserAuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
   //User
-  Route::get('/user/{id}', [UserController::class, 'show']);
-  Route::put('/user/{id}', [UserController::class, 'update']);
-  Route::delete('/user/{id}', [UserController::class, 'destroy']);
-  Route::get('/user/{id}/groups', [UserController::class, 'groups']);
-  Route::get('/user/{id}/invitations', [UserController::class, 'invitations']);
+  Route::get('/user/{user_id}', [UserController::class, 'show']);
+  Route::put('/user/{user_id}', [UserController::class, 'update']);
+  Route::delete('/user/{user_id}', [UserController::class, 'destroy']);
+  Route::get('/user/{user_id}/groups', [UserController::class, 'groups']);
+  Route::get('/user/{user_id}/invitations', [UserController::class, 'invitations']);
 
   // Invitations
   Route::post('/invitation', [InvitationController::class, 'create']);
-  Route::delete('/invitation/{id}', [InvitationController::class, 'destroy']);
-  Route::post('/invitation/{id}/accept', [InvitationController::class, 'accept']);
+  Route::delete('/invitation/{invitation_id}', [InvitationController::class, 'destroy']);
+  Route::post('/invitation/{invitation_id}/accept', [InvitationController::class, 'accept']);
 
   // Group
   Route::post('/group', [GroupController::class, 'create']);
-  Route::get('/group/{id}', [GroupController::class, 'show']);
-  Route::put('/group/{id}', [GroupController::class, 'update']);
-  Route::delete('/group/{id}', [GroupController::class, 'destroy']);
-  Route::get('/group/{id}/stadistics', [GroupController::class, 'stadistics']);
+  Route::get('/group/{group_id}', [GroupController::class, 'show']);
+  Route::put('/group/{group_id}', [GroupController::class, 'update']);
+  Route::delete('/group/{group_id}', [GroupController::class, 'destroy']);
+  Route::get('/group/{group_id}/stadistics', [GroupController::class, 'stadistics']);
 
   // Members
-  Route::get('/group/{id}/members', [MemberController::class, 'list']);
+  Route::get('/group/{group_id}/members', [MemberController::class, 'list']);
   Route::post('/group/{group_id}/member/{member_id}/exit', [MemberController::class, 'exit']);
 });

@@ -10,18 +10,18 @@ class Member extends Model
     use HasFactory;
 
     protected $fillable = [
-        'group',
-        'user',
+        'group_id',
+        'user_id',
         'admin',
     ];
 
-    public function userm()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'user');
+        return $this->belongsTo(User::class);
     }
 
-    public function groupm()
+    public function group()
     {
-        return $this->belongsTo(Group::class, 'post');
+        return $this->belongsTo(Group::class);
     }
 }

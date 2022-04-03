@@ -10,7 +10,6 @@ class Template_reward extends Model
     use HasFactory;
 
     protected $fillable = [
-        'group',
         'name',
         'description',
         'cost',

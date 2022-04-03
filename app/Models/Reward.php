@@ -10,14 +10,10 @@ class Reward extends Model
     use HasFactory;
 
     protected $fillable = [
-        'template',
-        'group',
-        'claimer',
         'name',
         'description',
         'cost',
         'color',
         'icon',
-        'claimed_date'
     ];
 }

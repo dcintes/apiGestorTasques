@@ -22,14 +22,14 @@ class UserController extends Controller
     /**
      * Retorna un usuari
      *
-     * @param  $id
+     * @param  $user_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user_id)
     {
-        $this->isLogedUser($id);
+        $this->isLogedUser($user_id);
 
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($user_id);
 
         return response()->json(new UserResource($user), 200);
     }
@@ -38,23 +38,23 @@ class UserController extends Controller
      * Actualitza un usuari
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  $id
+     * @param  $user_id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $user_id)
     {
-        $this->isLogedUser($id);
+        $this->isLogedUser($user_id);
 
         $data = $this->validate($request->all(), [
             'name' => 'required|max:255',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($id)
+                Rule::unique('users')->ignore($user_id)
             ],
         ]);
 
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($user_id);
         $user->update($data);
 
         return response()->json(new UserResource($user), 200);
@@ -63,24 +63,24 @@ class UserController extends Controller
     /**
      * Elimina un usuari
      *
-     * @param  $id
+     * @param  $user_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($user_id)
     {
-        $this->isLogedUser($id);
+        $this->isLogedUser($user_id);
 
         DB::beginTransaction();
         try {
             // Ralació usuaru membre
-            $member = Member::where('user', '=', $id)
-                ->update(['user' => null]);
-            // Tasques assignades
-            Task::where('assigned', '=', $member->id)
+            $member = Member::where('user_id', '=', $user_id)
+                ->update(['user_id' => null]);
+            // Tasques assignades pero no finalitzades
+            Task::where('assigned_id', '=', $member->id)
                 ->whereNull('completed_date')
-                ->update(['assigned' => null]);
+                ->update(['assigned_id' => null]);
             // Esborram usuari
-            User::findOrFail($id)->delete();
+            User::findOrFail($user_id)->delete();
 
             DB::commit();
         } catch (Exception $ex) {
@@ -93,15 +93,15 @@ class UserController extends Controller
     /**
      * Llista els grups d'un usuari
      *
-     * @param  $id
+     * @param  $user_id
      * @return \Illuminate\Http\Response
      */
-    public function groups($id)
+    public function groups($user_id)
     {
-        $this->isLogedUser($id);
+        $this->isLogedUser($user_id);
 
-        $groups = Group::join('members', 'groups.id', '=', 'members.group')
-            ->where('members.user', $id)
+        $groups = Group::join('members', 'groups.id', '=', 'members.group_id')
+            ->where('members.user_id', $user_id)
             ->get();
 
         return response()->json(new GroupCollection($groups), 200);
@@ -110,14 +110,14 @@ class UserController extends Controller
     /**
      * Llista les invitacions d'un usuari.
      *
-     * @param  $id
+     * @param  $user_id
      * @return \Illuminate\Http\Response
      */
-    public function invitations($id)
+    public function invitations($user_id)
     {
-        $this->isLogedUser($id);
+        $this->isLogedUser($user_id);
 
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($user_id);
 
         $invitations = Invitation::where('email', $user->email)
             ->get();

@@ -24,8 +24,8 @@ class MemberController extends Controller
     {
         $this->checkMember($group_id);
 
-        $members = Member::where('group', $group_id)
-            ->whereNotNull('user')
+        $members = Member::where('group_id', $group_id)
+            ->whereNotNull('user_id')
             ->get();
 
         return response()->json(new MemberCollection($members), 200);
@@ -40,8 +40,8 @@ class MemberController extends Controller
     public function exit($group_id, $member_id)
     {
         // Obtenim el membre a treure
-        $member = Member::where('group', $group_id)
-            ->where('user', $member_id)
+        $member = Member::where('group_id', $group_id)
+            ->where('user_id', $member_id)
             ->first();
 
         $currentMember = $this->checkMember($group_id);
@@ -49,7 +49,7 @@ class MemberController extends Controller
         // Validam que es ell mateix o un administrador
         if (
             !(array)$member &&
-            ($member->user == auth()->user()->id
+            ($member->user_id == auth()->user()->id
                 || !$currentMember->admin)
         ) {
             throw new ApiException("Forbidden", 403);
@@ -58,18 +58,19 @@ class MemberController extends Controller
 
         DB::beginTransaction();
         try {
-            // Ralació usuaru membre
-            $member->user = null;
+            // Ralació usuari membre
+            $member->user_id = null;
             $member->save();
 
             // Tasques assignades
-            Task::where('assigned', '=', $member->id)
+            Task::where('assigned_id', '=', $member->id)
                 ->whereNull('completed_date')
-                ->update(['assigned' => null]);
+                ->update(['assigned_id' => null]);
 
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();
+            throw $ex;
         }
 
         return 200;

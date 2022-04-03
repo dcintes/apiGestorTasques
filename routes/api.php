@@ -5,6 +5,7 @@ use App\Http\Controllers\Group\MemberController;
 use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Invitation\InvitationController;
+use App\Http\Controllers\Task\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [UserAuthController::class, 'register']);
 Route::post('/login', [UserAuthController::class, 'login']);
 
+// Autenticat
 Route::middleware('auth:api')->group(function () {
   //User
   Route::get('/user/{user_id}', [UserController::class, 'show']);
@@ -48,4 +50,14 @@ Route::middleware('auth:api')->group(function () {
   // Members
   Route::get('/group/{group_id}/members', [MemberController::class, 'list']);
   Route::post('/group/{group_id}/member/{member_id}/exit', [MemberController::class, 'exit']);
+
+  // Tasks
+  Route::get('/group/{group_id}/tasks', [TaskController::class, 'tasks']);
+  Route::post('/group/{group_id}/task', [TaskController::class, 'create']);
+  Route::get('/group/{group_id}/task/{task_id}', [TaskController::class, 'show']);
+  Route::put('/group/{group_id}/task/{task_id}', [TaskController::class, 'update']);
+  Route::delete('/group/{group_id}/task/{task_id}', [TaskController::class, 'destroy']);
+  Route::post('/group/{group_id}/task/{task_id}/assign', [TaskController::class, 'assign']);
+
+  // Rewards
 });

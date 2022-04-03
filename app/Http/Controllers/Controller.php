@@ -58,7 +58,7 @@ class Controller extends BaseController
             ->first();
 
         if (!(array)$member) {
-            throw throw new ApiException("Forbidden", 403);
+            throw new ApiException("Forbidden", 403);
         }
 
         return $member;
@@ -74,7 +74,7 @@ class Controller extends BaseController
         $member = $this->checkMember($group_id);
 
         if (!$member->admin) {
-            throw throw new ApiException("Forbidden", 403);
+            throw new ApiException("Forbidden", 403);
         }
 
         return $member;

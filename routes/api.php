@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Group\GroupController;
+use App\Http\Controllers\Group\MemberController;
 use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Invitation\InvitationController;
@@ -43,4 +44,8 @@ Route::middleware('auth:api')->group(function () {
   Route::put('/group/{id}', [GroupController::class, 'update']);
   Route::delete('/group/{id}', [GroupController::class, 'destroy']);
   Route::get('/group/{id}/stadistics', [GroupController::class, 'stadistics']);
+
+  // Members
+  Route::get('/group/{id}/members', [MemberController::class, 'list']);
+  Route::post('/group/{group_id}/member/{member_id}/exit', [MemberController::class, 'exit']);
 });

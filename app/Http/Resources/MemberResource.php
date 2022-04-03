@@ -20,7 +20,7 @@ class MemberResource extends JsonResource
             'banace' => $this->balance,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'name' => $this->user()->name,
+            'name' => $this->userm->name,
         ];
     }
 }

@@ -15,13 +15,13 @@ class Member extends Model
         'admin',
     ];
 
-    public function user()
+    public function userm()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user');
     }
 
-    public function group()
+    public function groupm()
     {
-        return $this->belongsTo(Group::class);
+        return $this->belongsTo(Group::class, 'post');
     }
 }

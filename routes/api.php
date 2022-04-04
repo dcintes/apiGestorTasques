@@ -5,6 +5,7 @@ use App\Http\Controllers\Group\MemberController;
 use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Invitation\InvitationController;
+use App\Http\Controllers\Reward\TemplateRewardController;
 use App\Http\Controllers\Task\TaskController;
 use Illuminate\Support\Facades\Route;
 

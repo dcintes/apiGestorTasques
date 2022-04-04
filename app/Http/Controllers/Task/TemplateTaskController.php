@@ -96,6 +96,7 @@ class TemplateTaskController extends Controller
      * Elimina una template task
      *
      * @param  $group_id
+     * @param  $template_id
      * @return \Illuminate\Http\Response
      */
     public function destroy($group_id, $template_id)

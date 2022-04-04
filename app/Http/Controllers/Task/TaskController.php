@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use DateTime;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -106,7 +107,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Comprova si l'usuari es admin
+     * Assigna la tasca a un member
      *
      * @param  $group_id
      * @param  $task_id
@@ -122,6 +123,28 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($task_id);
         $task->assigned_id = $data['member_id'];
+        $task->update();
+
+        return response()->json(new TaskResource($task), 200);
+    }
+
+    /**
+     * Comprova si l'usuari es admin
+     *
+     * @param  $group_id
+     * @param  $task_id
+     * @return void
+     */
+    public function complete($group_id, $task_id)
+    {
+        $member = $this->checkMember($group_id);
+        $task = Task::findOrFail($task_id);
+
+        if ($task->assigned_id != $member->id) {
+            return response()->json(['error' => 'No ets el propietari de la tasca'], 403);
+        }
+
+        $task->completed_date = new DateTime();
         $task->update();
 
         return response()->json(new TaskResource($task), 200);

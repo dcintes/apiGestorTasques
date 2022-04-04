@@ -6,7 +6,6 @@ use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Invitation\InvitationController;
 use App\Http\Controllers\Task\TaskController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,6 +57,7 @@ Route::middleware('auth:api')->group(function () {
   Route::put('/group/{group_id}/task/{task_id}', [TaskController::class, 'update']);
   Route::delete('/group/{group_id}/task/{task_id}', [TaskController::class, 'destroy']);
   Route::post('/group/{group_id}/task/{task_id}/assign', [TaskController::class, 'assign']);
+  Route::post('/group/{group_id}/task/{task_id}/complete', [TaskController::class, 'complete']);
 
   // Rewards
   Route::get('/group/{group_id}/rewards', [RewardController::class, 'list']);

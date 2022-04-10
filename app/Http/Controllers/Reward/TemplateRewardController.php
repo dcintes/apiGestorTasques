@@ -44,11 +44,11 @@ class TemplateRewardController extends Controller
         $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
             'cost' => 'required|numeric',
-            'color' => 'required|string|max:255',
-            'icon' => 'required|string|max:255'
+            'color' => 'required|string|max:7',
+            'icon' => 'required|string|max:10'
         ]);
 
         $templateReward = new Template_reward($data);
@@ -88,11 +88,11 @@ class TemplateRewardController extends Controller
         $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
             'cost' => 'required|numeric',
-            'color' => 'required|string|max:255',
-            'icon' => 'required|string|max:255'
+            'color' => 'required|string|max:7',
+            'icon' => 'required|string|max:10'
         ]);
 
         $templateReward = Template_reward::findOrFail($template_id);

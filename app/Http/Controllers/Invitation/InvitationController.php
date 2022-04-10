@@ -22,7 +22,7 @@ class InvitationController extends Controller
     {
         $data = $this->validate($request->all(), [
             'group_id' => 'required|exists:groups,id',
-            'email' => 'required|email',
+            'email' => 'required|email|max:50',
         ]);
 
         $this->checkAdmin($data['group']);

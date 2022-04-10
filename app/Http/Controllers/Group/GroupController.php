@@ -28,9 +28,9 @@ class GroupController extends Controller
     public function create(Request $request)
     {
         $data = $this->validate($request->all(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:50',
             'description' => 'required|max:255',
-            'coin' => 'required|max:255',
+            'coin' => 'required|max:50',
         ]);
 
         try {
@@ -82,9 +82,9 @@ class GroupController extends Controller
         $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:50',
             'description' => 'required|max:255',
-            'coin' => 'required|max:255',
+            'coin' => 'required|max:50',
         ]);
 
         $group = Group::findOrFail($group_id);

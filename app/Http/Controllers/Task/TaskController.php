@@ -38,7 +38,7 @@ class TaskController extends Controller
         $this->checkMember($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
             'value' => 'required|numeric'
         ]);
@@ -80,7 +80,7 @@ class TaskController extends Controller
         $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
             'value' => 'required|numeric'
         ]);

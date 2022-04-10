@@ -39,7 +39,7 @@ class TemplateTaskController extends Controller
         $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
             'value' => 'required|numeric'
         ]);
@@ -81,7 +81,7 @@ class TemplateTaskController extends Controller
         $this->checkAdmin($group_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
             'value' => 'required|numeric'
         ]);

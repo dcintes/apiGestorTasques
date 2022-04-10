@@ -46,11 +46,12 @@ class UserController extends Controller
         $this->isLogedUser($user_id);
 
         $data = $this->validate($request->all(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:50',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($user_id)
+                Rule::unique('users')->ignore($user_id),
+                'max:50'
             ],
         ]);
 

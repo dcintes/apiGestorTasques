@@ -16,9 +16,9 @@ class UserAuthController extends Controller
     public function register(Request $request)
     {
         $data = $this->validate($request->all(), [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'name' => 'required|max:50',
+            'email' => 'required|email|unique:users|max:50',
+            'password' => 'required|confirmed|min:8|max:16',
         ]);
 
         $data['password'] = bcrypt($request->password);

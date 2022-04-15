@@ -8,6 +8,7 @@ use App\Http\Resources\MemberResource;
 use App\Models\Invitation;
 use App\Models\Member;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class InvitationController extends Controller
@@ -41,7 +42,7 @@ class InvitationController extends Controller
     public function destroy($invitation_id)
     {
         $invitation = Invitation::findOrFail($invitation_id);
-        $user = User::where('email', $invitation->email);
+        $user = User::where('email', $invitation->email)->first();
 
         $this->isLogedUser($user->id);
 
@@ -59,7 +60,7 @@ class InvitationController extends Controller
     public function accept($invitation_id)
     {
         $invitation = Invitation::findOrFail($invitation_id);
-        $user = User::where('email', $invitation->email);
+        $user = User::where('email', $invitation->email)->first();
 
         $this->isLogedUser($user->id);
 

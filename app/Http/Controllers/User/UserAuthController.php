@@ -27,7 +27,7 @@ class UserAuthController extends Controller
 
         $token = $user->createToken('API Token')->accessToken;
 
-        return response()->json(['user_id' => $user, 'token' => $token], 201);
+        return response()->json(['user_id' => $user->id, 'token' => $token], 201);
     }
 
     /**

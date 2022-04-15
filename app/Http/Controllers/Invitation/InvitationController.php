@@ -10,6 +10,7 @@ use App\Models\Member;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvitationController extends Controller
 {
@@ -70,7 +71,17 @@ class InvitationController extends Controller
             'admin' => false,
         ]);
         $member->balance = 0;
-        $member->save();
+
+        DB::beginTransaction();
+        try {
+            $member->save();
+
+            $invitation->delete();
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+        }
 
         return response()->json(new MemberResource($member), 200);
     }

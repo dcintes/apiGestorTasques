@@ -54,9 +54,12 @@ class UserController extends Controller
                 Rule::unique('users')->ignore($user_id),
                 'max:50'
             ],
+            'password' => 'required|confirmed|min:8|max:16',
         ]);
 
         $user = User::findOrFail($user_id);
+
+        $user->password = bcrypt($data['password']);
         $user->update($data);
 
         return response()->json(new UserResource($user), 200);
@@ -74,19 +77,24 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
-            // Ralació usuaru membre
-            $member = Member::where('user_id', '=', $user_id)
-                ->update(['user_id' => null]);
+
             // Tasques assignades pero no finalitzades
-            Task::where('assigned_id', '=', $member->id)
+            Task::join('members', 'members.id', '=', 'tasks.assigned_id')
+                ->where('members.user_id', '=', $user_id)
                 ->whereNull('completed_date')
                 ->update(['assigned_id' => null]);
+
+            // Ralació usuaru membre
+            Member::where('user_id', '=', $user_id)
+                ->update(['user_id' => null]);
+
             // Esborram usuari
             User::findOrFail($user_id)->delete();
 
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();
+            throw $ex;
         }
 
         return 204;

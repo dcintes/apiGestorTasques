@@ -60,7 +60,7 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
 
         $user->password = bcrypt($data['password']);
-        $user->update($data);
+        $user->update();
 
         return response()->json(new UserResource($user), 200);
     }

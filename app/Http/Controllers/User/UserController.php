@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GroupCollection;
 use App\Http\Resources\InvitationCollection;
@@ -103,7 +104,7 @@ class UserController extends Controller
 
         $groups = Group::join('members', 'groups.id', '=', 'members.group_id')
             ->where('members.user_id', $user_id)
-            ->get();
+            ->get(['groups.*']);
 
         return response()->json(new GroupCollection($groups), 200);
     }

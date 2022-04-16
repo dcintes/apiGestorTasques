@@ -17,10 +17,11 @@ class MemberResource extends JsonResource
         return [
             'id' => $this->id,
             'admin' => $this->admin,
-            'banace' => $this->balance,
+            'balance' => $this->balance,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'name' => $this->user->name,
+            'user_id' => $this->user_id,
         ];
     }
 }

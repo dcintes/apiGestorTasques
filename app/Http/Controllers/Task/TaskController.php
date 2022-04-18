@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Task;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
+use App\Models\Member;
 use App\Models\Task;
 use DateTime;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -144,8 +147,22 @@ class TaskController extends Controller
             return response()->json(['error' => 'No ets el propietari de la tasca'], 403);
         }
 
-        $task->completed_date = new DateTime();
-        $task->update();
+        $assigned = Member::findOrFail($task->assigned_id);
+
+        DB::beginTransaction();
+        try {
+
+            $task->completed_date = new DateTime();
+            $task->update();
+
+            $assigned->balance += $task->value;
+            $assigned->update();
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+        }
 
         return response()->json(new TaskResource($task), 200);
     }

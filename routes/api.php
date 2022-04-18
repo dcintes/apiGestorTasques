@@ -54,7 +54,7 @@ Route::middleware('auth:api')->group(function () {
   Route::post('/group/{group_id}/member/{member_id}/exit', [MemberController::class, 'exit']);
 
   // Tasks
-  Route::get('/group/{group_id}/tasks', [TaskController::class, 'tasks']);
+  Route::get('/group/{group_id}/tasks', [TaskController::class, 'list']);
   Route::post('/group/{group_id}/task', [TaskController::class, 'create']);
   Route::get('/group/{group_id}/task/{task_id}', [TaskController::class, 'show']);
   Route::put('/group/{group_id}/task/{task_id}', [TaskController::class, 'update']);

@@ -16,6 +16,7 @@ class TemplateRewardResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'group_id' => $this->group_id,
             'name' => $this->name,
             'description' => $this->description,
             'cost' => $this->cost,

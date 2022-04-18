@@ -47,7 +47,7 @@ class TemplateTaskController extends Controller
         $templateTask = new Template_task($data);
         $templateTask->group_id = $group_id;
 
-        $templateTask->create();
+        $templateTask->save();
 
         return response()->json(new TemplateTaskResource($templateTask), 201);
     }

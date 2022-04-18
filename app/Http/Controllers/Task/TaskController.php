@@ -46,7 +46,7 @@ class TaskController extends Controller
         $task = new Task($data);
         $task->group_id = $group_id;
 
-        $task->create();
+        $task->save();
 
         return response()->json(new TaskResource($task), 201);
     }

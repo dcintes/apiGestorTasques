@@ -72,7 +72,7 @@ Route::middleware('auth:api')->group(function () {
   Route::get('/group/{group_id}/template/task/{template_id}', [TemplateTaskController::class, 'show']);
   Route::put('/group/{group_id}/template/task/{template_id}', [TemplateTaskController::class, 'update']);
   Route::delete('/group/{group_id}/template/task/{template_id}', [TemplateTaskController::class, 'destroy']);
-  Route::post('/group/{group_id}/template/task/{template_id}', [TemplateTaskController::class, 'instance']);
+  Route::post('/group/{group_id}/template/task/{template_id}/instance', [TemplateTaskController::class, 'instance']);
 
   // Tempalte reward
   Route::get('/group/{group_id}/template/rewards', [TemplateRewardController::class, 'list']);

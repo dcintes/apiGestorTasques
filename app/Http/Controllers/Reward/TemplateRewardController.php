@@ -54,7 +54,7 @@ class TemplateRewardController extends Controller
         $templateReward = new Template_reward($data);
         $templateReward->group_id = $group_id;
 
-        $templateReward->create();
+        $templateReward->save();
 
         return response()->json(new TemplateRewardResource($templateReward), 201);
     }
@@ -131,7 +131,7 @@ class TemplateRewardController extends Controller
         $template = Template_reward::findOrFail($template_id);
 
         // Validam que l'usuari te saldo suficient
-        if ($member->balance > $template->cost) {
+        if ($member->balance < $template->cost) {
             return response()->json(['error' => 'No té saldo suficient'], 400);
         }
 
@@ -147,7 +147,7 @@ class TemplateRewardController extends Controller
             $member->balance -= $template->cost;
             $member->update();
 
-            $reward->create();
+            $reward->save();
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();

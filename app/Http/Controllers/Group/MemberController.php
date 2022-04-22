@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Group;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MemberCollection;
+use App\Http\Resources\MemberResource;
 use App\Models\Member;
 use App\Models\Task;
 use Exception;
@@ -17,7 +18,7 @@ class MemberController extends Controller
     /**
      * Get all members of a group
      *
-     * @param  $id
+     * @param  $group_id
      * @return \Illuminate\Http\Response
      */
     public function list($group_id)
@@ -29,6 +30,22 @@ class MemberController extends Controller
             ->get();
 
         return response()->json(new MemberCollection($members), 200);
+    }
+
+    /**
+     * Get member
+     *
+     * @param  $group_id
+     * @param  $member_id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($group_id, $member_id)
+    {
+        $this->checkMember($group_id);
+
+        $member = Member::findOrFail($member_id);
+
+        return response()->json(new MemberResource($member), 200);
     }
 
     /**

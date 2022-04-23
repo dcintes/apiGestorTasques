@@ -134,7 +134,8 @@ class GroupController extends Controller
 
         $stadistics = (object)[
             'tasksByUser' => DB::table('tasks')
-                ->select('assigned_id', DB::raw('count(*) as total'))
+                ->select('assigned_id as member_id', DB::raw('count(*) as total'))
+                ->where('group_id', '=', $group_id)
                 ->groupBy('assigned_id')
                 ->get(),
         ];

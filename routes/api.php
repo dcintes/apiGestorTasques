@@ -65,7 +65,7 @@ Route::middleware('auth:api')->group(function () {
 
   // Rewards
   Route::get('/group/{group_id}/rewards', [RewardController::class, 'list']);
-  Route::post('/group/{group_id}/reward/{reward_id}', [RewardController::class, 'show']);
+  Route::get('/group/{group_id}/reward/{reward_id}', [RewardController::class, 'show']);
 
   // Template task
   Route::get('/group/{group_id}/template/tasks', [TemplateTaskController::class, 'list']);

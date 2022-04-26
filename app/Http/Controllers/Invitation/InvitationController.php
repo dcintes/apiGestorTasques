@@ -27,7 +27,7 @@ class InvitationController extends Controller
             'email' => 'required|email|max:50',
         ]);
 
-        $this->checkAdmin($data['group']);
+        $this->checkAdmin($data['group_id']);
 
         $invitation = Invitation::create($data);
 

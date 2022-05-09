@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Task;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TemplateTaskCollection;
@@ -65,6 +66,10 @@ class TemplateTaskController extends Controller
 
         $templateTask = Template_task::findOrFail($template_id);
 
+        if ($group_id != $templateTask->group_id) {
+            throw new ApiException("Aquesta taska no pertany al grup", 400);
+        }
+
         return response()->json(new TemplateTaskResource($templateTask), 200);
     }
 
@@ -87,6 +92,11 @@ class TemplateTaskController extends Controller
         ]);
 
         $templateTask = Template_task::findOrFail($template_id);
+
+        if ($group_id != $templateTask->group_id) {
+            throw new ApiException("Aquesta taska no pertany al grup", 400);
+        }
+
         $templateTask->update($data);
 
         return response()->json(new TemplateTaskResource($templateTask), 200);
@@ -103,7 +113,13 @@ class TemplateTaskController extends Controller
     {
         $this->checkAdmin($group_id);
 
-        Template_task::findOrFail($template_id)->delete();
+        $templateTask = Template_task::findOrFail($template_id);
+
+        if ($group_id != $templateTask->group_id) {
+            throw new ApiException("Aquesta taska no pertany al grup", 400);
+        }
+
+        $templateTask->delete();
 
         return response()->json(null, 204);
     }
@@ -119,6 +135,10 @@ class TemplateTaskController extends Controller
         $this->checkAdmin($group_id);
 
         $template = Template_task::findOrFail($template_id);
+
+        if ($group_id != $template->group_id) {
+            throw new ApiException("Aquesta taska no pertany al grup", 400);
+        }
 
         $task = new Task($template->toArray());
         $task->group_id = $group_id;

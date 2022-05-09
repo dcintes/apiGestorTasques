@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reward;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RewardResource;
 use App\Http\Resources\TemplateRewardCollection;
@@ -72,6 +73,10 @@ class TemplateRewardController extends Controller
 
         $templateReward = Template_reward::findOrFail($template_id);
 
+        if ($group_id != $templateReward->group_id) {
+            throw new ApiException("Aquesta recompensa no pertany al grup", 400);
+        }
+
         return response()->json(new TemplateRewardResource($templateReward), 200);
     }
 
@@ -96,6 +101,11 @@ class TemplateRewardController extends Controller
         ]);
 
         $templateReward = Template_reward::findOrFail($template_id);
+
+        if ($group_id != $templateReward->group_id) {
+            throw new ApiException("Aquesta recompensa no pertany al grup", 400);
+        }
+
         $templateReward->update($data);
 
         return response()->json(new TemplateRewardResource($templateReward), 200);
@@ -112,7 +122,13 @@ class TemplateRewardController extends Controller
     {
         $this->checkAdmin($group_id);
 
-        Template_reward::findOrFail($template_id)->delete();
+        $templateReward = Template_reward::findOrFail($template_id);
+
+        if ($group_id != $templateReward->group_id) {
+            throw new ApiException("Aquesta recompensa no pertany al grup", 400);
+        }
+
+        $templateReward->delete();
 
         return response()->json(null, 204);
     }
@@ -129,6 +145,10 @@ class TemplateRewardController extends Controller
         $member = $this->checkMember($group_id);
 
         $template = Template_reward::findOrFail($template_id);
+
+        if ($group_id != $template->group_id) {
+            throw new ApiException("Aquesta recompensa no pertany al grup", 400);
+        }
 
         // Validam que l'usuari te saldo suficient
         if ($member->balance < $template->cost) {

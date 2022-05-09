@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reward;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RewardCollection;
 use App\Http\Resources\RewardResource;
@@ -38,6 +39,10 @@ class RewardController extends Controller
         $this->checkMember($group_id);
 
         $reward = Reward::findOrFail($reward_id);
+
+        if ($group_id != $reward->group_id) {
+            throw new ApiException("Aquesta recompensa no pertany al grup", 400);
+        }
 
         return response()->json(new RewardResource($reward), 200);
     }

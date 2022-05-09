@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Task;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
@@ -67,6 +68,10 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($task_id);
 
+        if ($group_id != $task->group_id) {
+            throw new ApiException("Aquesta tasca no pertany al grup", 400);
+        }
+
         return response()->json(new TaskResource($task), 200);
     }
 
@@ -89,6 +94,11 @@ class TaskController extends Controller
         ]);
 
         $task = Task::findOrFail($task_id);
+
+        if ($group_id != $task->group_id) {
+            throw new ApiException("Aquesta tasca no pertany al grup", 400);
+        }
+
         $task->update($data);
 
         return response()->json(new TaskResource($task), 200);
@@ -104,7 +114,13 @@ class TaskController extends Controller
     {
         $this->checkAdmin($group_id);
 
-        Task::findOrFail($task_id)->delete();
+        $task = Task::findOrFail($task_id);
+
+        if ($group_id != $task->group_id) {
+            throw new ApiException("Aquesta tasca no pertany al grup", 400);
+        }
+
+        $task->delete();
 
         return 204;
     }
@@ -125,6 +141,11 @@ class TaskController extends Controller
         ]);
 
         $task = Task::findOrFail($task_id);
+
+        if ($group_id != $task->group_id) {
+            throw new ApiException("Aquesta tasca no pertany al grup", 400);
+        }
+
         $task->assigned_id = $data['member_id'];
         $task->update();
 
@@ -142,6 +163,10 @@ class TaskController extends Controller
     {
         $member = $this->checkMember($group_id);
         $task = Task::findOrFail($task_id);
+
+        if ($group_id != $task->group_id) {
+            throw new ApiException("Aquesta tasca no pertany al grup", 400);
+        }
 
         if ($task->assigned_id != $member->id) {
             return response()->json(['error' => 'No ets el propietari de la tasca'], 403);

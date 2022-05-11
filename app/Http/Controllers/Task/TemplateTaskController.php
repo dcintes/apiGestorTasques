@@ -9,7 +9,9 @@ use App\Http\Resources\TemplateTaskCollection;
 use App\Http\Resources\TemplateTaskResource;
 use App\Models\Task;
 use App\Models\Template_task;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TemplateTaskController extends Controller
 {
@@ -119,7 +121,19 @@ class TemplateTaskController extends Controller
             throw new ApiException("Aquesta taska no pertany al grup", 400);
         }
 
-        $templateTask->delete();
+        DB::beginTransaction();
+        try {
+
+            Task::where('template_id', '=', $templateTask->id)
+                ->update(['template_id' => null]);
+
+            $templateTask->delete();
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+        }
 
         return response()->json(null, 204);
     }

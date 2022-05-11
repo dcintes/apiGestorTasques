@@ -10,6 +10,7 @@ use App\Http\Resources\TemplateRewardResource;
 use App\Models\Member;
 use App\Models\Reward;
 use App\Models\Template_reward;
+use App\Models\Template_task;
 use App\Models\User;
 use DateTime;
 use Exception;
@@ -128,7 +129,21 @@ class TemplateRewardController extends Controller
             throw new ApiException("Aquesta recompensa no pertany al grup", 400);
         }
 
-        $templateReward->delete();
+        DB::beginTransaction();
+        try {
+
+            Reward::where('template_id', '=', $templateReward->id)
+                ->update(['template_id' => null]);
+
+            $templateReward->delete();
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+        }
+
+
 
         return response()->json(null, 204);
     }

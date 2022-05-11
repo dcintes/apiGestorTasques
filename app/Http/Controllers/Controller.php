@@ -39,7 +39,7 @@ class Controller extends BaseController
      */
     protected function isLogedUser($user_id)
     {
-        if (!auth()->user()->id == $user_id) {
+        if (auth()->user()->id != $user_id) {
             throw throw new ApiException("Forbidden", 403);
         }
 

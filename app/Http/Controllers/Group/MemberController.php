@@ -57,21 +57,17 @@ class MemberController extends Controller
     public function exit($group_id, $member_id)
     {
         // Obtenim el membre a treure
-        $member = Member::where('group_id', $group_id)
-            ->where('user_id', $member_id)
-            ->first();
+        $member = Member::findOrFail($member_id);
 
         $currentMember = $this->checkMember($group_id);
 
         // Validam que es ell mateix o un administrador
+        $permisos = ($member->user_id == auth()->user()->id || $currentMember->admin);
         if (
-            !(array)$member &&
-            ($member->user_id == auth()->user()->id
-                || !$currentMember->admin)
+            $member->group_id != $group_id || !$permisos
         ) {
-            throw new ApiException("Forbidden", 403);
+            throw new ApiException("Forbidden", 404);
         }
-
 
         DB::beginTransaction();
         try {

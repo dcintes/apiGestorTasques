@@ -174,7 +174,7 @@ class TemplateRewardController extends Controller
         $reward = new Reward($template->toArray());
         $reward->group_id = $group_id;
         $reward->template_id = $template_id;
-        $reward->claimer_id = auth()->user()->id;
+        $reward->claimer_id = $member->id;
         $reward->claimed_date = new DateTime();
 
         DB::beginTransaction();
